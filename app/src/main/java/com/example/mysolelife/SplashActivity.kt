@@ -22,13 +22,17 @@ class SplashActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         if (auth.currentUser?.uid == null) {
-            // 로그인 되어 있을 시 MainActivity 로 이동
-            Log.d("SplashActivity", "null")
-        } else {
             // 로그아웃이 되어 있을 시 IntroActivity 로 이동
-            Log.d("SplashActivity", "not null")
+            Log.d("SplashActivity", "null")
             Handler().postDelayed({
                 startActivity(Intent(this, IntroActivity::class.java))
+                finish()
+            }, 3000)
+        } else {
+            // 로그인 되어 있을 시 MainActivity 로 이동
+            Log.d("SplashActivity", "not null")
+            Handler().postDelayed({
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }, 3000)
         }
