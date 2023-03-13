@@ -1,19 +1,18 @@
 package com.example.mysolelife.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.mysolelife.R
-import com.example.mysolelife.databinding.FragmentHomeBinding
+import com.example.mysolelife.databinding.FragmentTipBinding
 
-class HomeFragment : Fragment() {
+class TipFragment : Fragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentTipBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,22 +23,22 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // DataBinding
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tip, container, false)
 
-        binding.tipTap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment2_to_tipFragment)
+        binding.homeTap.setOnClickListener {
+            it.findNavController().navigate(R.id.action_tipFragment_to_homeFragment2)
         }
 
         binding.talkTap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment2_to_talkFragment)
+            it.findNavController().navigate(R.id.action_tipFragment_to_talkFragment)
         }
 
         binding.bookmarkTap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment2_to_bookmarkFragment)
+            it.findNavController().navigate(R.id.action_tipFragment_to_bookmarkFragment)
         }
 
         binding.storeTap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment2_to_storeFragment)
+            it.findNavController().navigate(R.id.action_tipFragment_to_storeFragment)
         }
 
         return binding.root
