@@ -1,5 +1,6 @@
 package com.example.mysolelife.contentsList
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -46,6 +47,11 @@ class ContentListActivity : AppCompatActivity() {
         rvAdapter.itemClick = object : ContentRVAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
                 Toast.makeText(baseContext, items[position].title, Toast.LENGTH_LONG).show()
+
+                val intent = Intent(this@ContentListActivity, ContentShowActivity::class.java)
+                // 화면 넘어갈 시에 webUrl 데이터 넘겨줌.
+                intent.putExtra("url", items[position].webUrl)
+                startActivity(intent)
             }
         }
     }
