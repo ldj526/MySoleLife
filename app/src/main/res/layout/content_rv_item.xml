@@ -5,11 +5,13 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/imageArea"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:src="@drawable/main_icon_oneroom" />
 
     <TextView
+        android:id="@+id/textArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -18,6 +20,7 @@
         android:textStyle="bold" />
 
     <ImageView
+        android:id="@+id/bookmarkArea"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
