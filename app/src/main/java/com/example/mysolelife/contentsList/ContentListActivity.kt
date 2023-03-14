@@ -12,11 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mysolelife.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class ContentListActivity : AppCompatActivity() {
+
+    lateinit var myRef:DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_content_list)
@@ -26,8 +30,16 @@ class ContentListActivity : AppCompatActivity() {
 
         // Write a message to the database
         val database = Firebase.database
-        val myRef = database.getReference("contents")
 
+        // category 정보 받아오기
+        val category = intent.getStringExtra("category")
+
+        if (category == "category1") {
+            myRef = database.getReference("contents")
+
+        } else if (category == "category2") {
+            myRef = database.getReference("contents2")
+        }
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
@@ -91,6 +103,32 @@ class ContentListActivity : AppCompatActivity() {
 //                "https://philosopher-chan.tistory.com/1237"
 //            )
 //        )
+
+//        val myRef2 = database.getReference("contents2")
+//        myRef2.push().setValue(
+//            ContentModel(
+//                "title4",
+//                "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FblYPPY%2Fbtq66v0S4wu%2FRmuhpkXUO4FOcrlOmVG4G1%2Fimg.png",
+//                "https://philosopher-chan.tistory.com/1235"
+//            )
+//        )
+//
+//        myRef2.push().setValue(
+//            ContentModel(
+//                "title5",
+//                "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FznKK4%2Fbtq665AUWem%2FRUawPn5Wwb4cQ8BetEwN40%2Fimg.png",
+//                "https://philosopher-chan.tistory.com/1236"
+//            )
+//        )
+//
+//        myRef2.push().setValue(
+//            ContentModel(
+//                "title6",
+//                "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbtig9C%2Fbtq65UGxyWI%2FPRBIGUKJ4rjMkI7KTGrxtK%2Fimg.png",
+//                "https://philosopher-chan.tistory.com/1237"
+//            )
+//        )
+
 //        items.add(
 //            ContentModel(
 //                "title1",
