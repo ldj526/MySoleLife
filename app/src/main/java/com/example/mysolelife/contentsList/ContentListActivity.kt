@@ -64,18 +64,6 @@ class ContentListActivity : AppCompatActivity() {
 
         rv.adapter = rvAdapter
         rv.layoutManager = GridLayoutManager(this, 2)
-
-        // itemClick 기능
-        rvAdapter.itemClick = object : ContentRVAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                Toast.makeText(baseContext, items[position].title, Toast.LENGTH_LONG).show()
-
-                val intent = Intent(this@ContentListActivity, ContentShowActivity::class.java)
-                // 화면 넘어갈 시에 webUrl 데이터 넘겨줌.
-                intent.putExtra("url", items[position].webUrl)
-                startActivity(intent)
-            }
-        }
     }
 }
 
