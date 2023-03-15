@@ -12,7 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mysolelife.R
 
-class ContentRVAdapter(val context: Context, val item: ArrayList<ContentModel>) :
+class ContentRVAdapter(
+    val context: Context,
+    val item: ArrayList<ContentModel>,
+    val keyList: ArrayList<String>
+) :
     RecyclerView.Adapter<ContentRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentRVAdapter.ViewHolder {
@@ -21,7 +25,7 @@ class ContentRVAdapter(val context: Context, val item: ArrayList<ContentModel>) 
     }
 
     override fun onBindViewHolder(holder: ContentRVAdapter.ViewHolder, position: Int) {
-        holder.bindItems(item[position])
+        holder.bindItems(item[position], keyList[position])
     }
 
     override fun getItemCount(): Int {
@@ -29,7 +33,7 @@ class ContentRVAdapter(val context: Context, val item: ArrayList<ContentModel>) 
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(item: ContentModel) {
+        fun bindItems(item: ContentModel, key: String) {
             itemView.setOnClickListener {
                 Toast.makeText(context, item.title, Toast.LENGTH_LONG).show()
                 // ItemClick
@@ -39,6 +43,12 @@ class ContentRVAdapter(val context: Context, val item: ArrayList<ContentModel>) 
             }
             val contentTitle = itemView.findViewById<TextView>(R.id.textArea)
             val imageViewArea = itemView.findViewById<ImageView>(R.id.imageArea)
+            val bookmarkArea = itemView.findViewById<ImageView>(R.id.bookmarkArea)
+
+            bookmarkArea.setOnClickListener {
+                Toast.makeText(context, key, Toast.LENGTH_LONG).show()
+            }
+
             contentTitle.text = item.title
 
             Glide.with(context).load(item.imageUrl).into(imageViewArea)
