@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mysolelife.R
 import com.example.mysolelife.utils.FBAuth
+import com.example.mysolelife.utils.FBRef
 
 class ContentRVAdapter(
     val context: Context,
@@ -50,6 +51,9 @@ class ContentRVAdapter(
             bookmarkArea.setOnClickListener {
                 Log.d("ContentRVAdpater", FBAuth.getUid())
                 Toast.makeText(context, key, Toast.LENGTH_LONG).show()
+
+                // database 에서 bookmarkRef 아래에 Uid 를 두고 그 아래에 key 값을 두고 Good 으로 받기
+                FBRef.bookmarkRef.child(FBAuth.getUid()).child(key).setValue("Good")
             }
 
             contentTitle.text = item.title
