@@ -18,7 +18,8 @@ import com.example.mysolelife.utils.FBRef
 class ContentRVAdapter(
     val context: Context,
     val item: ArrayList<ContentModel>,
-    val keyList: ArrayList<String>
+    val keyList: ArrayList<String>,
+    val bookmarkIdList: MutableList<String>
 ) :
     RecyclerView.Adapter<ContentRVAdapter.ViewHolder>() {
 
@@ -47,6 +48,13 @@ class ContentRVAdapter(
             val contentTitle = itemView.findViewById<TextView>(R.id.textArea)
             val imageViewArea = itemView.findViewById<ImageView>(R.id.imageArea)
             val bookmarkArea = itemView.findViewById<ImageView>(R.id.bookmarkArea)
+
+            // bookmarkList 에 key 값이 들어가 있는지 확인
+            if (bookmarkIdList.contains(key)) {
+                bookmarkArea.setImageResource(R.drawable.bookmark_color)
+            } else {
+                bookmarkArea.setImageResource(R.drawable.bookmark_white)
+            }
 
             bookmarkArea.setOnClickListener {
                 Log.d("ContentRVAdpater", FBAuth.getUid())

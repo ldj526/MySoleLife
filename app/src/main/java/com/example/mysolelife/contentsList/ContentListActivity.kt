@@ -19,6 +19,8 @@ import com.google.firebase.ktx.Firebase
 class ContentListActivity : AppCompatActivity() {
 
     lateinit var myRef: DatabaseReference
+    val bookmarkIdList = mutableListOf<String>()
+    lateinit var rvAdapter: ContentRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,7 @@ class ContentListActivity : AppCompatActivity() {
 
         val items = ArrayList<ContentModel>()
         val itemKeyList = ArrayList<String>()
-        val rvAdapter = ContentRVAdapter(baseContext, items, itemKeyList)
+        rvAdapter = ContentRVAdapter(baseContext, items, itemKeyList, bookmarkIdList)
 
         // Write a message to the database
         val database = Firebase.database
@@ -75,9 +77,11 @@ class ContentListActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
                 for (dataModel in dataSnapshot.children) {
-                    Log.d("getBookmarkData", dataModel.key.toString())
-                    Log.d("getBookmarkData", dataModel.toString())
+                    bookmarkIdList.add(dataModel.key.toString())
                 }
+                Log.d("ContentListActivity", bookmarkIdList.toString())
+                // Sync adapter
+                rvAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
