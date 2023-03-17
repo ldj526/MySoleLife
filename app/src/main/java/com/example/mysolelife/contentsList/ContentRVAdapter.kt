@@ -60,11 +60,21 @@ class ContentRVAdapter(
                 Log.d("ContentRVAdpater", FBAuth.getUid())
                 Toast.makeText(context, key, Toast.LENGTH_LONG).show()
 
-                // database 에서 bookmarkRef 아래에 Uid 를 두고 그 아래에 key 값을 두고 BookmarkModel 값 받기
-                FBRef.bookmarkRef
-                    .child(FBAuth.getUid())
-                    .child(key)
-                    .setValue(BookmarkModel(true))
+
+                if (bookmarkIdList.contains(key)) {
+                    // 북마크 있을 때 삭제
+                    FBRef.bookmarkRef
+                        .child(FBAuth.getUid())
+                        .child(key)
+                        .removeValue()
+                } else {
+                    // 북마크 없을 때
+                    // database 에서 bookmarkRef 아래에 Uid 를 두고 그 아래에 key 값을 두고 BookmarkModel 값 받기
+                    FBRef.bookmarkRef
+                        .child(FBAuth.getUid())
+                        .child(key)
+                        .setValue(BookmarkModel(true))
+                }
             }
 
             contentTitle.text = item.title

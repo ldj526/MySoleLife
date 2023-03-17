@@ -75,6 +75,10 @@ class ContentListActivity : AppCompatActivity() {
     private fun getBookmarkData() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                // 북마크가 중복되어 추가되는 것을 막기 위함.
+                bookmarkIdList.clear()
+
                 // Get Post object and use the values to update the UI
                 for (dataModel in dataSnapshot.children) {
                     bookmarkIdList.add(dataModel.key.toString())
