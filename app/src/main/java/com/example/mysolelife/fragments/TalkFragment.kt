@@ -1,5 +1,6 @@
 package com.example.mysolelife.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.mysolelife.R
+import com.example.mysolelife.board.BoardWriteActivity
 import com.example.mysolelife.databinding.FragmentTalkBinding
 
 class TalkFragment : Fragment() {
@@ -24,6 +26,11 @@ class TalkFragment : Fragment() {
     ): View? {
         // DataBinding
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_talk, container, false)
+
+        binding.writeBtn.setOnClickListener {
+            val intent = Intent(context, BoardWriteActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.homeTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_talkFragment_to_homeFragment2)
