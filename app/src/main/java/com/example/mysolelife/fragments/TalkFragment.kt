@@ -25,6 +25,7 @@ class TalkFragment : Fragment() {
     private lateinit var binding: FragmentTalkBinding
 
     private val boardDataList = mutableListOf<BoardModel>()
+    private val boardKeyList = mutableListOf<String>()
 
     private val TAG = TalkFragment::class.java.simpleName
 
@@ -46,10 +47,16 @@ class TalkFragment : Fragment() {
         binding.boardListView.adapter = boardLVAdapter
 
         binding.boardListView.setOnItemClickListener { parent, view, position, id ->
+            // listView에 있는 데이터들을 다른 액티비티로 전달해줘서 만들기
+//            val intent = Intent(context, BoardInsideActivity::class.java)
+//            intent.putExtra("title", boardDataList[position].title)
+//            intent.putExtra("content", boardDataList[position].content)
+//            intent.putExtra("time", boardDataList[position].time)
+//            startActivity(intent)
+
+            // Firebase에 있는 board에 대한 데이터의 id를 기반으로 다시 데이터를 받아오는 방법
             val intent = Intent(context, BoardInsideActivity::class.java)
-            intent.putExtra("title", boardDataList[position].title)
-            intent.putExtra("content", boardDataList[position].content)
-            intent.putExtra("time", boardDataList[position].time)
+            intent.putExtra("key", boardKeyList[position])
             startActivity(intent)
         }
 
@@ -91,8 +98,11 @@ class TalkFragment : Fragment() {
                     // BoardModel 형식의 데이터 받기
                     val item = dataModel.getValue(BoardModel::class.java)
                     boardDataList.add(item!!)
+                    // key 값 전달
+                    boardKeyList.add(dataModel.key.toString())
                 }
                 // 최신 글이 제일 위로 가게 하기 위함.
+                boardKeyList.reverse()
                 boardDataList.reverse()
                 // Sync
                 boardLVAdapter.notifyDataSetChanged()
