@@ -76,6 +76,9 @@ class TalkFragment : Fragment() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
+                // 중복되는 데이터가 생기므로 기존에 있던 데이터들을 삭제해준다.
+                boardDataList.clear()
+
                 for (dataModel in dataSnapshot.children) {
                     Log.d(TAG, dataModel.toString())
                     // BoardModel 형식의 데이터 받기
