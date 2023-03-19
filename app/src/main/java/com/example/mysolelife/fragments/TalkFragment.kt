@@ -1,6 +1,5 @@
 package com.example.mysolelife.fragments
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +10,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.mysolelife.R
+import com.example.mysolelife.board.BoardInsideActivity
 import com.example.mysolelife.board.BoardListLVAdapter
 import com.example.mysolelife.board.BoardModel
 import com.example.mysolelife.board.BoardWriteActivity
-import com.example.mysolelife.contentsList.ContentModel
 import com.example.mysolelife.databinding.FragmentTalkBinding
 import com.example.mysolelife.utils.FBRef
 import com.google.firebase.database.DataSnapshot
@@ -45,6 +44,14 @@ class TalkFragment : Fragment() {
         // ListView 연결
         boardLVAdapter = BoardListLVAdapter(boardDataList)
         binding.boardListView.adapter = boardLVAdapter
+
+        binding.boardListView.setOnItemClickListener { parent, view, position, id ->
+            val intent = Intent(context, BoardInsideActivity::class.java)
+            intent.putExtra("title", boardDataList[position].title)
+            intent.putExtra("content", boardDataList[position].content)
+            intent.putExtra("time", boardDataList[position].time)
+            startActivity(intent)
+        }
 
         binding.writeBtn.setOnClickListener {
             val intent = Intent(context, BoardWriteActivity::class.java)
@@ -85,6 +92,8 @@ class TalkFragment : Fragment() {
                     val item = dataModel.getValue(BoardModel::class.java)
                     boardDataList.add(item!!)
                 }
+                // 최신 글이 제일 위로 가게 하기 위함.
+                boardDataList.reverse()
                 // Sync
                 boardLVAdapter.notifyDataSetChanged()
                 Log.d(TAG, boardDataList.toString())
