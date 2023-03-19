@@ -9,7 +9,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.mysolelife.R
+import com.example.mysolelife.contentsList.BookmarkRVAdapter
+import com.example.mysolelife.contentsList.ContentModel
 import com.example.mysolelife.databinding.FragmentBookmarkBinding
 import com.example.mysolelife.utils.FBAuth
 import com.example.mysolelife.utils.FBRef
@@ -22,6 +27,12 @@ class BookmarkFragment : Fragment() {
 
     private val TAG = BookmarkFragment::class.java.simpleName
 
+    val bookmarkIdList = mutableListOf<String>()
+    val items = ArrayList<ContentModel>()
+    val itemKeyList = ArrayList<String>()
+
+    lateinit var rvAdapter: BookmarkRVAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -33,11 +44,15 @@ class BookmarkFragment : Fragment() {
         // DataBinding
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bookmark, container, false)
 
-        // 전체 카테고리에 있는 컨텐츠 데이터들을 가져오기
-        getCategoryData()
-
         // 사용자가 북마크한 정보를 가져오기
         getBookmarkData()
+
+        rvAdapter = BookmarkRVAdapter(requireContext(), items, itemKeyList, bookmarkIdList)
+
+        val rv: RecyclerView = binding.bookmarkRV
+        rv.adapter = rvAdapter
+
+        rv.layoutManager = GridLayoutManager(requireContext(), 2)
 
         binding.homeTap.setOnClickListener {
             it.findNavController().navigate(R.id.action_bookmarkFragment_to_homeFragment2)
@@ -64,7 +79,15 @@ class BookmarkFragment : Fragment() {
                 // Get Post object and use the values to update the UI
                 for (dataModel in dataSnapshot.children) {
                     Log.d(TAG, dataModel.toString())
+                    val item = dataModel.getValue(ContentModel::class.java)
+                    // 전체 컨텐츠 중에서 사용자가 북마크한 정보만 보여줌
+                    if(bookmarkIdList.contains(dataModel.key.toString())){
+                        items.add(item!!)
+                        itemKeyList.add(dataModel.key.toString())
+                    }
                 }
+                // Sync
+                rvAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -83,7 +106,10 @@ class BookmarkFragment : Fragment() {
                 // Get Post object and use the values to update the UI
                 for (dataModel in dataSnapshot.children) {
                     Log.e(TAG, dataModel.toString())
+                    bookmarkIdList.add(dataModel.key.toString())
                 }
+                // 전체 카테고리에 있는 컨텐츠 데이터들을 가져오기
+                getCategoryData()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
