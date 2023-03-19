@@ -1,7 +1,9 @@
 package com.example.mysolelife.fragments
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +14,22 @@ import com.example.mysolelife.R
 import com.example.mysolelife.board.BoardListLVAdapter
 import com.example.mysolelife.board.BoardModel
 import com.example.mysolelife.board.BoardWriteActivity
+import com.example.mysolelife.contentsList.ContentModel
 import com.example.mysolelife.databinding.FragmentTalkBinding
+import com.example.mysolelife.utils.FBRef
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class TalkFragment : Fragment() {
 
     private lateinit var binding: FragmentTalkBinding
+
+    private val boardDataList = mutableListOf<BoardModel>()
+
+    private val TAG = TalkFragment::class.java.simpleName
+
+    private lateinit var boardLVAdapter: BoardListLVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +42,8 @@ class TalkFragment : Fragment() {
         // DataBinding
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_talk, container, false)
 
-        val boardList = mutableListOf<BoardModel>()
-        boardList.add(BoardModel("a", "b", "c", "d"))
-
         // ListView 연결
-        val boardLVAdapter = BoardListLVAdapter(boardList)
+        boardLVAdapter = BoardListLVAdapter(boardDataList)
         binding.boardListView.adapter = boardLVAdapter
 
         binding.writeBtn.setOnClickListener {
@@ -57,6 +67,32 @@ class TalkFragment : Fragment() {
             it.findNavController().navigate(R.id.action_talkFragment_to_storeFragment)
         }
 
+        getFBBoardData()
+
         return binding.root
+    }
+
+    private fun getFBBoardData() {
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Get Post object and use the values to update the UI
+                for (dataModel in dataSnapshot.children) {
+                    Log.d(TAG, dataModel.toString())
+                    // BoardModel 형식의 데이터 받기
+                    val item = dataModel.getValue(BoardModel::class.java)
+                    boardDataList.add(item!!)
+                }
+                // Sync
+                boardLVAdapter.notifyDataSetChanged()
+                Log.d(TAG, boardDataList.toString())
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        FBRef.boardRef.addValueEventListener(postListener)
     }
 }
