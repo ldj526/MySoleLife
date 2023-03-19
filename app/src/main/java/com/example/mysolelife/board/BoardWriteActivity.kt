@@ -23,6 +23,8 @@ class BoardWriteActivity : AppCompatActivity() {
 
     private val TAG = BoardWriteActivity::class.java.simpleName
 
+    private var isImageUpload = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_board_write)
@@ -49,13 +51,16 @@ class BoardWriteActivity : AppCompatActivity() {
 
             Toast.makeText(this, "게시글 입력 완료", Toast.LENGTH_LONG).show()
 
-            imageUpload(key)
+            if (isImageUpload) {
+                imageUpload(key)
+            }
             finish()
         }
 
         binding.imageArea.setOnClickListener {
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(gallery, 100)
+            isImageUpload = true
         }
     }
 
@@ -66,7 +71,7 @@ class BoardWriteActivity : AppCompatActivity() {
         // Create a storage reference from our app
         val storageRef = storage.reference
         // Create a reference to "mountains.jpg"
-        val mountainsRef = storageRef.child("$key.png")
+        val mountainsRef = storageRef.child("${key}.png")
 
         val imageView = binding.imageArea
         imageView.isDrawingCacheEnabled = true

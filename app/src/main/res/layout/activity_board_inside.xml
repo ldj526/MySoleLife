@@ -48,5 +48,11 @@
             android:text="내용"
             android:textColor="@color/black" />
 
+        <ImageView
+            android:id="@+id/getImageArea"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_margin="30dp" />
+
     </LinearLayout>
 </layout>
