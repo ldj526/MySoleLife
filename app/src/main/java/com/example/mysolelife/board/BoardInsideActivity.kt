@@ -26,14 +26,9 @@ class BoardInsideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_board_inside)
 
-        // 첫번째 방법
-//        val title = intent.getStringExtra("title").toString()
-//        val content = intent.getStringExtra("content").toString()
-//        val time = intent.getStringExtra("time").toString()
-//
-//        binding.titleArea.text = title
-//        binding.timeArea.text = time
-//        binding.contentArea.text = content
+        binding.boardSettingIcon.setOnClickListener {
+
+        }
 
         // 두번째 방법
         val key = intent.getStringExtra("key")
