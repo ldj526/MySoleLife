@@ -26,6 +26,8 @@ class BoardInsideActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBoardInsideBinding
 
+    private lateinit var key: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_board_inside)
@@ -35,10 +37,9 @@ class BoardInsideActivity : AppCompatActivity() {
         }
 
         // 두번째 방법
-        val key = intent.getStringExtra("key")
-
-        getBoardData(key.toString())
-        getImageData(key.toString())
+        key = intent.getStringExtra("key").toString()
+        getBoardData(key)
+        getImageData(key)
     }
 
     private fun showDialog() {
@@ -54,7 +55,9 @@ class BoardInsideActivity : AppCompatActivity() {
         }
 
         alertDialog.findViewById<Button>(R.id.removeBtn)?.setOnClickListener {
-            Toast.makeText(this, "bb", Toast.LENGTH_LONG).show()
+            FBRef.boardRef.child(key).removeValue()
+            Toast.makeText(this, "삭제완료", Toast.LENGTH_LONG).show()
+            finish()
         }
     }
 
@@ -79,13 +82,18 @@ class BoardInsideActivity : AppCompatActivity() {
     private fun getBoardData(key: String) {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // 데이터를 하나만 가져오면 되므로 반복문 사용이 필요 없다.
-                val dataModel = dataSnapshot.getValue(BoardModel::class.java)
-                Log.d(TAG, dataModel!!.title)
+                // 삭제가 됐을 때 불러올 정보가 없어서 에러가 나기 때문에 예외처리를 해준다.
+                try {
+                    // 데이터를 하나만 가져오면 되므로 반복문 사용이 필요 없다.
+                    val dataModel = dataSnapshot.getValue(BoardModel::class.java)
+                    Log.d(TAG, dataModel!!.title)
 
-                binding.titleArea.text = dataModel!!.title
-                binding.timeArea.text = dataModel!!.time
-                binding.contentArea.text = dataModel!!.content
+                    binding.titleArea.text = dataModel!!.title
+                    binding.timeArea.text = dataModel!!.time
+                    binding.contentArea.text = dataModel!!.content
+                } catch (e:Exception){
+                    Log.d(TAG, "삭제완료")
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
