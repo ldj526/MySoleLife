@@ -1,5 +1,6 @@
 package com.example.mysolelife.board
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,7 +52,12 @@ class BoardInsideActivity : AppCompatActivity() {
         val alertDialog = mBuilder.show()
 
         alertDialog.findViewById<Button>(R.id.editBtn)?.setOnClickListener {
-            Toast.makeText(this, "aa", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "수정 버튼을 눌렀습니다.", Toast.LENGTH_LONG).show()
+
+            val intent = Intent(this, BoardEditActivity::class.java)
+            intent.putExtra("key", key)
+            alertDialog.dismiss()
+            startActivity(intent)
         }
 
         alertDialog.findViewById<Button>(R.id.removeBtn)?.setOnClickListener {
@@ -91,7 +97,7 @@ class BoardInsideActivity : AppCompatActivity() {
                     binding.titleArea.text = dataModel!!.title
                     binding.timeArea.text = dataModel!!.time
                     binding.contentArea.text = dataModel!!.content
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     Log.d(TAG, "삭제완료")
                 }
             }
