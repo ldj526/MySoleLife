@@ -2,7 +2,11 @@ package com.example.mysolelife.board
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -27,7 +31,7 @@ class BoardInsideActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_board_inside)
 
         binding.boardSettingIcon.setOnClickListener {
-
+            showDialog()
         }
 
         // 두번째 방법
@@ -35,6 +39,23 @@ class BoardInsideActivity : AppCompatActivity() {
 
         getBoardData(key.toString())
         getImageData(key.toString())
+    }
+
+    private fun showDialog() {
+        val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
+        val mBuilder = AlertDialog.Builder(this)
+            .setView(mDialogView)
+            .setTitle("게시글 수정/삭제")
+
+        val alertDialog = mBuilder.show()
+
+        alertDialog.findViewById<Button>(R.id.editBtn)?.setOnClickListener {
+            Toast.makeText(this, "aa", Toast.LENGTH_LONG).show()
+        }
+
+        alertDialog.findViewById<Button>(R.id.removeBtn)?.setOnClickListener {
+            Toast.makeText(this, "bb", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun getImageData(key: String) {
@@ -45,7 +66,7 @@ class BoardInsideActivity : AppCompatActivity() {
         val imageViewFromFB = binding.getImageArea
 
         storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-            if(task.isSuccessful){
+            if (task.isSuccessful) {
                 Glide.with(this)
                     .load(task.result)
                     .into(imageViewFromFB)
