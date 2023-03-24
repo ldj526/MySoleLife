@@ -9,15 +9,18 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.example.mysolelife.R
 import com.example.mysolelife.databinding.ActivityBoardInsideBinding
+import com.example.mysolelife.utils.FBAuth
 import com.example.mysolelife.utils.FBRef
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.core.view.View
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
@@ -97,6 +100,17 @@ class BoardInsideActivity : AppCompatActivity() {
                     binding.titleArea.text = dataModel!!.title
                     binding.timeArea.text = dataModel!!.time
                     binding.contentArea.text = dataModel!!.content
+
+                    val myUid = FBAuth.getUid()
+                    val writerUid = dataModel.uid
+
+                    // 글쓴 사람이 자기자신일 경우 수정, 삭제 버튼 보이게 하기
+                    if (myUid.equals(writerUid)) {
+                        binding.boardSettingIcon.isVisible = true
+                    } else {
+
+                    }
+
                 } catch (e: Exception) {
                     Log.d(TAG, "삭제완료")
                 }
