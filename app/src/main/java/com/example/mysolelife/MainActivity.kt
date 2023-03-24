@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import com.example.mysolelife.auth.IntroActivity
+import com.example.mysolelife.setting.SettingActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -20,15 +22,9 @@ class MainActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
 
-//        findViewById<Button>(R.id.logoutBtn).setOnClickListener {
-//            // 로그아웃
-//            auth.signOut()
-//            val intent = Intent(this, IntroActivity::class.java)
-//
-//            // Activity 이동 후 뒤로가기 눌렀을 때 이전 화면 없애주는 것
-//            intent.flags =
-//                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-//            startActivity(intent)
-//        }
+        findViewById<ImageView>(R.id.settingBtn).setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
