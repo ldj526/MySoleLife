@@ -14,5 +14,7 @@ class FBRef {
 
         val boardRef = database.getReference("board")
 
+        val commentRef = database.getReference("comment")
+
     }
 }
