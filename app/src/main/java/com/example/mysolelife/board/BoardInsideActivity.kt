@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.example.mysolelife.R
+import com.example.mysolelife.comment.CommentLVAdapter
 import com.example.mysolelife.comment.CommentModel
 import com.example.mysolelife.databinding.ActivityBoardInsideBinding
 import com.example.mysolelife.utils.FBAuth
@@ -31,6 +32,10 @@ class BoardInsideActivity : AppCompatActivity() {
 
     private lateinit var key: String
 
+    private val commentDataList = mutableListOf<CommentModel>()
+
+    private lateinit var commentAdapter: CommentLVAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_board_inside)
@@ -47,13 +52,47 @@ class BoardInsideActivity : AppCompatActivity() {
         binding.commentBtn.setOnClickListener {
             insertComment(key)
         }
+
+        // ListView 연결
+        commentAdapter = CommentLVAdapter(commentDataList)
+        binding.commentLV.adapter = commentAdapter
+
+        getCommentData(key)
+    }
+
+    fun getCommentData(key: String) {
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Get Post object and use the values to update the UI
+                // 중복되는 데이터가 생기므로 기존에 있던 데이터들을 삭제해준다.
+                commentDataList.clear()
+                for (dataModel in dataSnapshot.children) {
+                    // CommentModel 형식의 데이터 받기
+                    val item = dataModel.getValue(CommentModel::class.java)
+                    commentDataList.add(item!!)
+                }
+
+                // Adapter sync
+                commentAdapter.notifyDataSetChanged()
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+        }
+        FBRef.commentRef.child(key).addValueEventListener(postListener)
     }
 
     fun insertComment(key: String) {
         FBRef.commentRef
             .child(key)
             .push()
-            .setValue(CommentModel(binding.commentArea.text.toString()))
+            .setValue(
+                CommentModel(binding.commentArea.text.toString(),
+                FBAuth.getTime())
+            )
 
         binding.commentArea.setText("")
     }
